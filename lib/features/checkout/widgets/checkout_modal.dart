@@ -1,7 +1,6 @@
 import 'package:cart_example_app/features/cart/models/cart_model.dart';
 import 'package:cart_example_app/features/cart/providers/cart_provider.dart';
 import 'package:cart_example_app/models/order_model.dart';
-import 'package:cart_example_app/providers/order_provider.dart';
 import 'package:cart_example_app/screens/order_accepted_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -277,7 +276,6 @@ class _CheckoutModalState extends State<CheckoutModal> {
                         ),
                         child: const Text('Submit Order'),
                         onPressed: () {
-                          context.read<OrderProvider>().addOrder(order);
                           context.read<CartProvider>().clearCart();
                           Navigator.push(
                             context,

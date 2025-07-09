@@ -4,7 +4,6 @@ import 'package:cart_example_app/features/products/widgets/product_item.dart';
 import 'package:cart_example_app/features/products/widgets/product_item_skeleton.dart';
 import 'package:cart_example_app/models/order_model.dart';
 import 'package:cart_example_app/models/product_model.dart';
-import 'package:cart_example_app/providers/order_provider.dart';
 import 'package:cart_example_app/providers/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +65,6 @@ class _HomePageState extends State<HomePage> {
     bestSelling = Provider.of<ProductProvider>(context).bestSelling;
     exclusiveOffers = Provider.of<ProductProvider>(context).offers;
     produce = Provider.of<ProductProvider>(context).otherProducts;
-    recentOrders = context.watch<OrderProvider>().orders;
 
     return Scaffold(
       body: SingleChildScrollView(

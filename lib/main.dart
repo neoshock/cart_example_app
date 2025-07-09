@@ -2,7 +2,6 @@ import 'package:cart_example_app/configs/app_theme.dart';
 import 'package:cart_example_app/features/cart/providers/cart_provider.dart';
 import 'package:cart_example_app/providers/category_provider.dart';
 import 'package:cart_example_app/providers/deparment_provider.dart';
-import 'package:cart_example_app/providers/order_provider.dart';
 import 'package:cart_example_app/providers/product_provider.dart';
 import 'package:cart_example_app/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +28,6 @@ class MainApp extends StatelessWidget {
           create: (_) => ProductProvider(),
         ),
         ChangeNotifierProvider<CartProvider>(create: (_) => CartProvider()),
-        ChangeNotifierProvider<OrderProvider>(create: (_) => OrderProvider()),
       ],
       builder: (context, child) => MaterialApp(
         theme: AppTheme.lightTheme,
