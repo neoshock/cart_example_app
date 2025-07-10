@@ -9,7 +9,7 @@ class Order {
   double? subTotal;
   double? tax;
   double? estimatedTotal;
-  double? pickupFee;
+  double? discount;
   List<Cart>? carts;
 
   Order({

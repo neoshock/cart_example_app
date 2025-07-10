@@ -24,3 +24,8 @@ flutter:
   - assets/imgs/
   - assets/imgs/productsImgs/
   - assets/imgs/deparments/
+  - datasets/products_json.json
+  - datasets/departments_json.json
+  - datasets/category_data_json.json
+
+

@@ -1,0 +1,85 @@
+{
+  "categories": [
+    {
+      "id": "1",
+      "name": "Buns & Rolls",
+      "quantity": 0,
+      "department_id": "1"
+    },
+    {
+      "id": "2",
+      "name": "Bread",
+      "quantity": 0,
+      "department_id": "1"
+    },
+    {
+      "id": "3",
+      "name": "Breakfast Breads & Pastries",
+      "quantity": 0,
+      "department_id": "1"
+    }
+  ],
+  "aisles": [
+    {
+      "aisle_id": "1",
+      "name": "Aisle 8",
+      "deparment_id": "1"
+    },
+    {
+      "aisle_id": "2",
+      "name": "Aisle 11",
+      "deparment_id": "1"
+    },
+    {
+      "aisle_id": "3",
+      "name": "Aisle 12",
+      "deparment_id": "1"
+    },
+    {
+      "aisle_id": "4",
+      "name": "Aisle 14",
+      "deparment_id": "1"
+    }
+  ],
+  "brands": [
+    {
+      "brand_id": "1",
+      "name": "Lewis",
+      "deparment_id": "1"
+    },
+    {
+      "brand_id": "2",
+      "name": "S. Rosen's",
+      "deparment_id": "1"
+    },
+    {
+      "brand_id": "3",
+      "name": "Pepperidge Farm®",
+      "deparment_id": "1"
+    },
+    {
+      "brand_id": "4",
+      "name": "Brownberry",
+      "deparment_id": "1"
+    }
+  ],
+  "sensitives": [
+    {
+      "sensitive_id": "1",
+      "name": "Peanut Free",
+      "deparment_id": "1"
+    }
+  ],
+  "filters": [
+    {
+      "filter_id": "1",
+      "name": "Sale Items",
+      "deparment_id": "1"
+    },
+    {
+      "filter_id": "2",
+      "name": "New Products",
+      "deparment_id": "1"
+    }
+  ]
+}

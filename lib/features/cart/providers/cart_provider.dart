@@ -1,12 +1,11 @@
 import 'dart:math';
 
+import 'package:cart_example_app/features/cart/models/cart_model.dart';
 import 'package:cart_example_app/models/product_model.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../models/cart_model.dart';
-
 class CartProvider with ChangeNotifier {
-  List<Cart> _cartList = [];
+  final List<Cart> _cartList = [];
   List<Cart> get cartList => _cartList;
 
   double _total = 0.0;
@@ -40,7 +39,8 @@ class CartProvider with ChangeNotifier {
       cart.qunatity = cart.qunatity! + 1;
       debugPrint('index: ${cart.qunatity}');
       cart.total_price = double.parse(
-          (cart.product!.price! * cart.qunatity!).toStringAsFixed(2));
+        (cart.product!.price! * cart.qunatity!).toStringAsFixed(2),
+      );
       _cartList[index] = cart;
     }
     notifyListeners();
@@ -52,7 +52,8 @@ class CartProvider with ChangeNotifier {
     if (index != -1) {
       cart.qunatity = cart.qunatity! - 1;
       cart.total_price = double.parse(
-          (cart.product!.price! * cart.qunatity!).toStringAsFixed(2));
+        (cart.product!.price! * cart.qunatity!).toStringAsFixed(2),
+      );
       _cartList[index] = cart;
       if (_cartList[index].qunatity! < 1) {
         _cartList.remove(cart);
@@ -71,17 +72,17 @@ class CartProvider with ChangeNotifier {
 
   Future<void> updateCartTotal() async {
     _total = 0.0;
-    _cartList.forEach((cart) {
+    for (var cart in _cartList) {
       _total += cart.total_price!;
-    });
+    }
     notifyListeners();
   }
 
-  double getTotal () {
+  double getTotal() {
     _total = 0.0;
-    _cartList.forEach((cart) {
+    for (var cart in _cartList) {
       _total += cart.total_price!;
-    });
+    }
     return _total;
   }
 

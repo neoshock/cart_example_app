@@ -43,9 +43,9 @@ class _CheckoutModalState extends State<CheckoutModal> {
       estimatedTotal: 0,
       carts: widget.carts,
     );
-    order.pickupFee = 4.95;
+    order.discount = -4.95;
     order.tax = order.subTotal! * 0.07;
-    order.estimatedTotal = order.subTotal! + order.tax! + order.pickupFee!;
+    order.estimatedTotal = order.subTotal! + order.tax! + order.discount!;
   }
 
   @override
@@ -158,7 +158,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
                     iconColor: Colors.black,
                     onTap: () {},
                     title: const Text(
-                      'Pickup Fee',
+                      'Discount',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -173,7 +173,7 @@ class _CheckoutModalState extends State<CheckoutModal> {
                         // ignore: prefer_const_literals_to_create_immutables
                         children: [
                           Text(
-                            '\$${order.pickupFee!.toStringAsFixed(2)}',
+                            '\$${order.discount!.toStringAsFixed(2)}',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 15,

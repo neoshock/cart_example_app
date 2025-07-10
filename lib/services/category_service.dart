@@ -1,5 +1,5 @@
-
-
+import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:cart_example_app/models/aisle_model.dart';
 import 'package:cart_example_app/models/brand_model.dart';
 import 'package:cart_example_app/models/category_model.dart';
@@ -9,155 +9,206 @@ import 'package:cart_example_app/models/sensitive_model.dart';
 import 'package:cart_example_app/repositories/cateogory_repository.dart';
 
 class CategoryService implements CategoryRepository {
-  final List<CategoryModel> initData = [
-    CategoryModel(
-        id: "1", name: "Buns & Rolls", quantity: 0, department_id: "1"),
-    CategoryModel(id: "2", name: "Bread", quantity: 0, department_id: "1"),
-    CategoryModel(
-        id: "3",
-        name: "Breakfast Breads & Pastries",
-        quantity: 0,
-        department_id: "1"),
-  ];
+  Map<String, dynamic>? _cachedData;
 
-  final List<Aisle> initAisle = [
-    Aisle(aisle_id: "1", name: "Aisle 8", deparment_id: "1"),
-    Aisle(aisle_id: "2", name: "Aisle 11", deparment_id: "1"),
-    Aisle(aisle_id: "3", name: "Aisle 12", deparment_id: "1"),
-    Aisle(aisle_id: "4", name: "Aisle 14", deparment_id: "1"),
-  ];
+  Future<Map<String, dynamic>> _loadData() async {
+    if (_cachedData != null) {
+      return _cachedData!;
+    }
 
-  final List<Brand> initBrand = [
-    Brand(brand_id: "1", name: "Lewis", deparment_id: "1"),
-    Brand(brand_id: "2", name: "S. Rosen's", deparment_id: "1"),
-    Brand(brand_id: "3", name: "Pepperidge Farm®", deparment_id: "1"),
-    Brand(brand_id: "4", name: "Brownberry", deparment_id: "1"),
-  ];
+    final String response = await rootBundle.loadString(
+      'datasets/category_data_json.json',
+    );
+    _cachedData = json.decode(response);
+    return _cachedData!;
+  }
 
-  final List<Sensitive> initSensitive = [
-    Sensitive(sensitive_id: "1", name: "Peanut Free", deparment_id: "1"),
-  ];
+  List<CategoryModel> _parseCategories(List<dynamic> categoriesJson) {
+    return categoriesJson
+        .map(
+          (json) => CategoryModel(
+            id: json['id'],
+            name: json['name'],
+            quantity: json['quantity'],
+            department_id: json['department_id'],
+          ),
+        )
+        .toList();
+  }
 
-  final List<Filter> initFilter = [
-    Filter(filter_id: "1", name: "Sale Items", deparment_id: "1"),
-    Filter(filter_id: "2", name: "New Products", deparment_id: "1"),
-  ];
+  List<Aisle> _parseAisles(List<dynamic> aislesJson) {
+    return aislesJson
+        .map(
+          (json) => Aisle(
+            aisle_id: json['aisle_id'],
+            name: json['name'],
+            deparment_id: json['deparment_id'],
+          ),
+        )
+        .toList();
+  }
 
-  @override
-  Future<List<CategoryModel>> getCategories() {
-    return Future.delayed(const Duration(seconds: 1), () => initData);
+  List<Brand> _parseBrands(List<dynamic> brandsJson) {
+    return brandsJson
+        .map(
+          (json) => Brand(
+            brand_id: json['brand_id'],
+            name: json['name'],
+            deparment_id: json['deparment_id'],
+          ),
+        )
+        .toList();
+  }
+
+  List<Sensitive> _parseSensitives(List<dynamic> sensitivesJson) {
+    return sensitivesJson
+        .map(
+          (json) => Sensitive(
+            sensitive_id: json['sensitive_id'],
+            name: json['name'],
+            deparment_id: json['deparment_id'],
+          ),
+        )
+        .toList();
+  }
+
+  List<Filter> _parseFilters(List<dynamic> filtersJson) {
+    return filtersJson
+        .map(
+          (json) => Filter(
+            filter_id: json['filter_id'],
+            name: json['name'],
+            deparment_id: json['deparment_id'],
+          ),
+        )
+        .toList();
   }
 
   @override
-  Future<List<CategoryModel>> getCategoriesByDepartment(String departmentId) {
-    return Future.delayed(
-        const Duration(seconds: 1),
-        () => initData
-            .where((element) => element.department_id == departmentId)
-            .toList());
+  Future<List<CategoryModel>> getCategories() async {
+    final data = await _loadData();
+    return _parseCategories(data['categories']);
   }
 
-  Future<List<Aisle>> getAisles() {
-    return Future.delayed(const Duration(seconds: 1), () => initAisle);
+  @override
+  Future<List<CategoryModel>> getCategoriesByDepartment(
+    String departmentId,
+  ) async {
+    final categories = await getCategories();
+    return categories
+        .where((element) => element.department_id == departmentId)
+        .toList();
   }
 
-  Future getAislesByDepartment(String departmentId) {
-    return Future.delayed(
-        const Duration(seconds: 1),
-        () => initAisle
-            .where((element) => element.deparment_id == departmentId)
-            .toList());
+  Future<List<Aisle>> getAisles() async {
+    final data = await _loadData();
+    return _parseAisles(data['aisles']);
   }
 
-  Future<List<Brand>> getBrands() {
-    return Future.delayed(const Duration(seconds: 1), () => initBrand);
+  Future<List<Aisle>> getAislesByDepartment(String departmentId) async {
+    final aisles = await getAisles();
+    return aisles
+        .where((element) => element.deparment_id == departmentId)
+        .toList();
   }
 
-  Future getBrandsByDepartment(String departmentId) {
-    return Future.delayed(
-        const Duration(seconds: 1),
-        () => initBrand
-            .where((element) => element.deparment_id == departmentId)
-            .toList());
+  Future<List<Brand>> getBrands() async {
+    final data = await _loadData();
+    return _parseBrands(data['brands']);
   }
 
-  Future<List<Sensitive>> getSensitives() {
-    return Future.delayed(const Duration(seconds: 1), () => initSensitive);
+  Future<List<Brand>> getBrandsByDepartment(String departmentId) async {
+    final brands = await getBrands();
+    return brands
+        .where((element) => element.deparment_id == departmentId)
+        .toList();
   }
 
-  Future getSensitivesByDepartment(String departmentId) {
-    return Future.delayed(
-        const Duration(seconds: 1),
-        () => initSensitive
-            .where((element) => element.deparment_id == departmentId)
-            .toList());
+  Future<List<Sensitive>> getSensitives() async {
+    final data = await _loadData();
+    return _parseSensitives(data['sensitives']);
   }
 
-  Future<List<Filter>> getFilters() {
-    return Future.delayed(const Duration(seconds: 1), () => initFilter);
+  Future<List<Sensitive>> getSensitivesByDepartment(String departmentId) async {
+    final sensitives = await getSensitives();
+    return sensitives
+        .where((element) => element.deparment_id == departmentId)
+        .toList();
   }
 
-  Future getFiltersByDepartment(String departmentId) {
-    return Future.delayed(
-        const Duration(seconds: 1),
-        () => initFilter
-            .where((element) => element.deparment_id == departmentId)
-            .toList());
+  Future<List<Filter>> getFilters() async {
+    final data = await _loadData();
+    return _parseFilters(data['filters']);
   }
 
-  Future getCategoriesByProducts(List<Product> products) {
-    return Future.delayed(
-        const Duration(seconds: 1),
-        () => initData
-            .where((element) => products
-                .where((product) => product.category_id == element.id)
-                .toList()
-                .isNotEmpty)
-            .toList());
+  Future<List<Filter>> getFiltersByDepartment(String departmentId) async {
+    final filters = await getFilters();
+    return filters
+        .where((element) => element.deparment_id == departmentId)
+        .toList();
   }
 
-  Future getAislesByProducts(List<Product> products) {
-    return Future.delayed(
-        const Duration(seconds: 1),
-        () => initAisle
-            .where((element) => products
-                .where((product) => product.aisle_id == element.aisle_id)
-                .toList()
-                .isNotEmpty)
-            .toList());
+  Future<List<CategoryModel>> getCategoriesByProducts(
+    List<Product> products,
+  ) async {
+    final categories = await getCategories();
+    return categories
+        .where(
+          (element) => products
+              .where((product) => product.category_id == element.id)
+              .toList()
+              .isNotEmpty,
+        )
+        .toList();
   }
 
-  Future getBrandsByProducts(List<Product> products) {
-    return Future.delayed(
-        const Duration(seconds: 1),
-        () => initBrand
-            .where((element) => products
-                .where((product) => product.brand_id == element.brand_id)
-                .toList()
-                .isNotEmpty)
-            .toList());
+  Future<List<Aisle>> getAislesByProducts(List<Product> products) async {
+    final aisles = await getAisles();
+    return aisles
+        .where(
+          (element) => products
+              .where((product) => product.aisle_id == element.aisle_id)
+              .toList()
+              .isNotEmpty,
+        )
+        .toList();
   }
 
-  Future getSensitivesByProducts(List<Product> products) {
-    return Future.delayed(
-        const Duration(seconds: 1),
-        () => initSensitive
-            .where((element) => products
-                .where(
-                    (product) => product.sensitivie_id == element.sensitive_id)
-                .toList()
-                .isNotEmpty)
-            .toList());
+  Future<List<Brand>> getBrandsByProducts(List<Product> products) async {
+    final brands = await getBrands();
+    return brands
+        .where(
+          (element) => products
+              .where((product) => product.brand_id == element.brand_id)
+              .toList()
+              .isNotEmpty,
+        )
+        .toList();
   }
 
-  Future getFiltersByProducts(List<Product> products) {
-    return Future.delayed(
-        const Duration(seconds: 1),
-        () => initFilter
-            .where((element) => products
-                .where((product) => product.filter_id == element.filter_id)
-                .toList()
-                .isNotEmpty)
-            .toList());
+  Future<List<Sensitive>> getSensitivesByProducts(
+    List<Product> products,
+  ) async {
+    final sensitives = await getSensitives();
+    return sensitives
+        .where(
+          (element) => products
+              .where((product) => product.sensitivie_id == element.sensitive_id)
+              .toList()
+              .isNotEmpty,
+        )
+        .toList();
+  }
+
+  Future<List<Filter>> getFiltersByProducts(List<Product> products) async {
+    final filters = await getFilters();
+    return filters
+        .where(
+          (element) => products
+              .where((product) => product.filter_id == element.filter_id)
+              .toList()
+              .isNotEmpty,
+        )
+        .toList();
   }
 }
