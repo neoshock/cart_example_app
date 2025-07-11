@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:cart_example_app/models/aisle_model.dart';
 import 'package:cart_example_app/models/brand_model.dart';
 import 'package:cart_example_app/models/category_model.dart';
-import 'package:cart_example_app/models/filter_model.dart';
 import 'package:cart_example_app/models/product_model.dart';
 import 'package:cart_example_app/models/sensitive_model.dart';
 import 'package:cart_example_app/repositories/cateogory_repository.dart';
@@ -72,18 +71,6 @@ class CategoryService implements CategoryRepository {
         .toList();
   }
 
-  List<Filter> _parseFilters(List<dynamic> filtersJson) {
-    return filtersJson
-        .map(
-          (json) => Filter(
-            filter_id: json['filter_id'],
-            name: json['name'],
-            deparment_id: json['deparment_id'],
-          ),
-        )
-        .toList();
-  }
-
   @override
   Future<List<CategoryModel>> getCategories() async {
     final data = await _loadData();
@@ -136,18 +123,6 @@ class CategoryService implements CategoryRepository {
         .toList();
   }
 
-  Future<List<Filter>> getFilters() async {
-    final data = await _loadData();
-    return _parseFilters(data['filters']);
-  }
-
-  Future<List<Filter>> getFiltersByDepartment(String departmentId) async {
-    final filters = await getFilters();
-    return filters
-        .where((element) => element.deparment_id == departmentId)
-        .toList();
-  }
-
   Future<List<CategoryModel>> getCategoriesByProducts(
     List<Product> products,
   ) async {
@@ -194,18 +169,6 @@ class CategoryService implements CategoryRepository {
         .where(
           (element) => products
               .where((product) => product.sensitivie_id == element.sensitive_id)
-              .toList()
-              .isNotEmpty,
-        )
-        .toList();
-  }
-
-  Future<List<Filter>> getFiltersByProducts(List<Product> products) async {
-    final filters = await getFilters();
-    return filters
-        .where(
-          (element) => products
-              .where((product) => product.filter_id == element.filter_id)
               .toList()
               .isNotEmpty,
         )

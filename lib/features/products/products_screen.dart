@@ -30,15 +30,8 @@ class _ProductListPageState extends State<ProductListPage> {
 
   @override
   Widget build(BuildContext context) {
-    products = context.watch<ProductProvider>().filteredProducts.isEmpty
-        ? context.watch<ProductProvider>().products
-        : context.watch<ProductProvider>().filteredProducts;
+    context.watch<ProductProvider>().products;
     context.read<ProductProvider>().loadProducts();
-    context.read<CategoryProvider>().getCategoriesByProducts(products);
-    context.read<CategoryProvider>().getAislesByProducts(products);
-    context.read<CategoryProvider>().getBrandsByProducts(products);
-    context.read<CategoryProvider>().getSensitivesByProducts(products);
-    context.read<CategoryProvider>().getFiltersByProducts(products);
     return Scaffold(
       body: Column(
         children: [

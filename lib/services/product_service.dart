@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:cart_example_app/models/aisle_model.dart';
 import 'package:cart_example_app/models/brand_model.dart';
 import 'package:cart_example_app/models/category_model.dart';
-import 'package:cart_example_app/models/filter_model.dart';
 import 'package:cart_example_app/models/product_model.dart';
 import 'package:cart_example_app/models/sensitive_model.dart';
 import 'package:cart_example_app/repositories/product_repository.dart';
@@ -115,19 +114,6 @@ class ProductService implements ProductRepository {
       }
     }
     return Future.delayed(Duration(seconds: 1), () => productsByBrands);
-  }
-
-  Future<List<Product>> getProductsByFilters(List<Filter> filters) async {
-    await _loadProductsFromJson();
-    List<Product> productsByFilters = [];
-    for (var filter in filters) {
-      for (var product in _products) {
-        if (product.filter_id == filter.filter_id) {
-          productsByFilters.add(product);
-        }
-      }
-    }
-    return Future.delayed(Duration(seconds: 1), () => productsByFilters);
   }
 
   Future<List<Product>> getProductsBySensitivies(
